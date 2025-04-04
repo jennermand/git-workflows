@@ -6,7 +6,10 @@ on:
     project: 
       required: true
       type: string
-    container: 
+    container:     
+      required: true
+      type: string       
+    image-name-file: 
       required: false
       type: string 
       default: "image"
@@ -21,7 +24,7 @@ jobs:
  
     - name: UpdateRefFile 
       run: | 
-        echo "${{ inputs.run_number }}"> ./picluster/apps/${{ inputs.project }}/${{ inputs.container }}.imageref.txt 
+        echo "${{ inputs.container }}"> ./picluster/apps/${{ inputs.project }}/${{ inputs.image-name-file: }}.imageref.txt 
          
     - name: Push to Repo 
       run: | 
@@ -30,4 +33,4 @@ jobs:
         cd ./picluster 
         git add . 
         git commit -m "Updated by GitHub Actions" 
-        git push https://${{ secrets.token }}@${{ inputs.REPOSITORY }} --all 
+        git push https://${{ secrets.token }}@picluster --all 
