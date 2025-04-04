@@ -60,6 +60,3 @@ jobs:
       - name: Set output image name
         id: output
         run: echo "::set-output name=image-name::harbor.mongodb.dk/ginkartoteket/${{ inputs.image-name }}"
-
-      - name: Output image name
-        run: echo "Image name: ${{ steps.output.outputs.image-name }}"
