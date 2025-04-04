@@ -3,16 +3,17 @@
 name: BuildAndPushImageOnHarbor 
 on: 
   workflow_call:
-    project: 
-      required: true
-      type: string
-    container:     
-      required: true
-      type: string       
-    image-name-file: 
-      required: false
-      type: string 
-      default: "image"
+    inputs:
+      project: 
+        required: true
+        type: string
+      container:     
+        required: true
+        type: string       
+      image-name-file: 
+        required: false
+        type: string 
+        default: "image"
           
 jobs: 
   reusable_workflow_job: 
