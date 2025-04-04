@@ -21,7 +21,7 @@ jobs:
     steps:              
     - name: Clone Repository 
       run: | 
-        git clone https://${{ secrets.token}}@https://github.com/jennermand/picluster
+        git clone https://${{ secrets.token}}@github.com/jennermand/picluster
  
     - name: UpdateRefFile 
       run: | 
