@@ -5,8 +5,16 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
-  workflow_dispatch:
-    # Manual trigger
+  workflow_call:
+    inputs:
+      example_input:
+        required: true
+        type: string
+    secrets:
+      HARBOR_USERNAME:
+        required: true
+      HARBOR_PASSWORD:
+        required: true
 
 jobs:
   build-and-push:
