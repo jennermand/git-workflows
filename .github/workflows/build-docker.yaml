@@ -7,7 +7,7 @@ on:
     branches: [main, master]
   workflow_call:
     inputs:
-      example_input:
+      image-name:
         required: true
         type: string
     secrets:
@@ -43,7 +43,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: harbor.mongodb.dk/ginkartoteket/angular-app
+          images: harbor.mongodb.dk/ginkartoteket/${{ inputs.image-name }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
