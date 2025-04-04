@@ -25,7 +25,7 @@ jobs:
  
     - name: UpdateRefFile 
       run: | 
-        echo "${{ inputs.container }}"> ./picluster/apps/${{ inputs.project }}/${{ inputs.image-name-file: }}.imageref.txt 
+        echo "${{ inputs.container }}"> ./picluster/apps/${{ inputs.project }}/${{ inputs.image-name-file }}.imageref.txt 
          
     - name: Push to Repo 
       run: | 
