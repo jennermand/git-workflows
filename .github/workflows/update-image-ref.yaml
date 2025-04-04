@@ -1,5 +1,3 @@
-# https://github.com/n3wt0n/ReusableWorkflow/blob/f89362e4c298f42a89be625eee44c5e85bd8166b/.github/workflows/buildAndPublishDockerImage.yml#L3-L4 
-# https://github.com/n3wt0n/ActionsTest/blob/fe32f39d831d08c84fec078f6aa912f6fd606568/.github/workflows/reusableWorkflowsUser.yml 
 name: BuildAndPushImageOnHarbor 
 on: 
   workflow_call:
@@ -19,9 +17,16 @@ jobs:
   reusable_workflow_job: 
     runs-on: ubuntu-latest 
     steps:              
+    - name: vars
+      run: |
+        echo ${{ secrets.TOKEN }}
+        echo ${{ inputs.project }}
+        echo ${{ inputs.container }}
+        echo ${{ inputs.image-name-file }}
+        
     - name: Clone Repository 
       run: | 
-        git clone https://${{ secrets.TOKEN}}@github.com/jennermand/picluster
+        git clone https://${{ secrets.TOKEN }}@github.com/jennermand/picluster.git
  
     - name: UpdateRefFile 
       run: | 
