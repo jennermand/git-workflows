@@ -1,1 +1,33 @@
-
+# https://github.com/n3wt0n/ReusableWorkflow/blob/f89362e4c298f42a89be625eee44c5e85bd8166b/.github/workflows/buildAndPublishDockerImage.yml#L3-L4 
+# https://github.com/n3wt0n/ActionsTest/blob/fe32f39d831d08c84fec078f6aa912f6fd606568/.github/workflows/reusableWorkflowsUser.yml 
+name: BuildAndPushImageOnHarbor 
+on: 
+  workflow_call:
+    project: 
+      required: true
+      type: string
+    container: 
+      required: false
+      type: string 
+      default: "image"
+          
+jobs: 
+  reusable_workflow_job: 
+    runs-on: ubuntu-latest 
+    steps:              
+    - name: Clone Repository 
+      run: | 
+        git clone https://${{ secrets.token}}@picluster
+ 
+    - name: UpdateRefFile 
+      run: | 
+        echo "${{ inputs.run_number }}"> ./picluster/apps/${{ inputs.project }}/${{ inputs.container }}.imageref.txt 
+         
+    - name: Push to Repo 
+      run: | 
+        git config --global user.name "autobot@karsoe.dk" 
+        git config --global user.email "autobot@karsoe.dk" 
+        cd ./picluster 
+        git add . 
+        git commit -m "Updated by GitHub Actions" 
+        git push https://${{ secrets.token }}@${{ inputs.REPOSITORY }} --all 
