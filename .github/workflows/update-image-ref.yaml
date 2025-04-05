@@ -8,10 +8,10 @@ on:
       container:     
         required: true
         type: string       
-      image-name-file: 
-        required: false
+      version: 
+        required: true
         type: string 
-        default: "image"
+        
           
 jobs: 
   reusable_workflow_job: 
@@ -30,7 +30,7 @@ jobs:
  
     - name: UpdateRefFile 
       run: | 
-        yq -i '.angular-app.image.repository = "ginkartoteket/ginkartoteket" | .angular-app.image.tag = "latest"' ./picluster/apps/${{ inputs.project }}/values.yaml 
+        yq -i ".${{ inputs.project}}.image.repository = \"${{ inputs.container}\" | .${{ inputs.project}}.image.tag = \"${{ inputs.version }}\"" ./picluster/apps/${{ inputs.project }}/values.yaml 
          
     - name: Push to Repo 
       run: | 
