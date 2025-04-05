@@ -18,6 +18,9 @@ on:
         required: false
         type: string
         default: "1.0.${{ github.run_number  }}"
+      project:
+        required: true
+        type: string
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -47,7 +50,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: harbor.mongodb.dk/ginkartoteket/${{ inputs.image-name }}
+          images: harbor.mongodb.dk/${{ inputs.project }}/${{ inputs.image-name }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
@@ -61,7 +64,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: harbor.mongodb.dk/ginkartoteket/${{ inputs.image-name }}:${{ inputs.buildid }}
+          tags: harbor.mongodb.dk/${{ inputs.project }}/${{ inputs.image-name }}:${{ inputs.buildid }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
