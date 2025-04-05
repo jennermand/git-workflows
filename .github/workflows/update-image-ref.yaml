@@ -30,7 +30,7 @@ jobs:
  
     - name: UpdateRefFile 
       run: | 
-        yq -i ".${{ inputs.container}}.image.repository = \"${{ inputs.container}\" | .${{ inputs.container}}.image.tag = \"${{ inputs.version }}\"" ./picluster/apps/${{ inputs.project }}/values.yaml 
+        yq -i ".${{ inputs.container }}.image.repository = \"${{ inputs.container }}\" | .${{ inputs.container }}.image.tag = \"${{ inputs.version }}\"" ./picluster/apps/${{ inputs.project }}/values.yaml 
          
     - name: Push to Repo 
       run: | 
