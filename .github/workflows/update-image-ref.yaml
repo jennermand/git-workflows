@@ -22,7 +22,7 @@ jobs:
         echo ${{ secrets.TOKEN }}
         echo ${{ inputs.project }}
         echo ${{ inputs.container }}
-        echo ${{ inputs.image-name-file }}
+        echo ${{ inputs.version }}
         
     - name: Clone Repository 
       run: | 
