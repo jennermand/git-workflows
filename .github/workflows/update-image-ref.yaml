@@ -31,7 +31,7 @@ jobs:
     - name: UpdateRefFile 
       run: | 
         container="harbor.mongodb.dk/${{ inputs.project }}/${{ inputs.container }}"
-        yq -i ".${{ inputs.container }}.image.repository = \"${{ inputs.container }}\" | .${{ inputs.container }}.image.tag = \"${{ inputs.version }}\"" ./picluster/apps/${{ inputs.project }}/values.yaml 
+        yq -i ".${{ inputs.container }}.image.repository = \"${container}\" | .${{ inputs.container }}.image.tag = \"${{ inputs.version }}\"" ./picluster/apps/${{ inputs.project }}/values.yaml 
          
     - name: Push to Repo 
       run: | 
