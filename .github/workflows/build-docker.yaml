@@ -9,16 +9,21 @@ on:
     outputs:
       image-name:
         description: name of image
-        value: ${{ jobs.build-and-push.outputs.output }}
+        value: ${{ jobs.build-and-push.outputs.image-name }}
     inputs:
       image-name:
         required: true
         type: string
-
+      buildid:
+        required: false
+        type: string
+        default: "1.0.${{ github.run_id }}"
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
+    outputs: 
+      image-name:  ${{ steps.output.outputs.image-name }}
+      
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -37,7 +42,9 @@ jobs:
           registry: harbor.mongodb.dk
           username: ${{ secrets.HARBOR_USERNAME }}
           password: ${{ secrets.HARBOR_PASSWORD }}
-
+      - name: Create new image name
+        run: |
+          echo
       - name: Extract metadata for Docker
         id: meta
         uses: docker/metadata-action@v5
@@ -46,10 +53,11 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern=1
+            type=semver,pattern=${{ inputs.buildid }}
             type=sha,format=short
-
+          
+          
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -60,7 +68,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
+    
       - name: Set output image name
-        id: output
-        run: echo "::set-output name=image-name::harbor.mongodb.dk/ginkartoteket/${{ inputs.image-name }}"
+        id: output        
+        run: |
+          echo "image-name=${{ steps.meta.outputs.tags }}" >> $GITHUB_OUTPUT
