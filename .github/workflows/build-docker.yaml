@@ -17,7 +17,7 @@ on:
       buildid:
         required: false
         type: string
-        default: "1.0.${{ github.run_id }}"
+        default: "0.${{ github.run_id }}"
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
