@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main, master]
   workflow_call:
+    outputs:
+      image-name:
+        description: name of image
+        value: ${{ jobs.build-and-push.outputs.output }}
     inputs:
       image-name:
         required: true
