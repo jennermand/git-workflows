@@ -7,9 +7,9 @@ on:
     branches: [main, master]
   workflow_call:
     outputs:
-      image-name:
+      version:
         description: name of image
-        value: ${{ jobs.build-and-push.outputs.image-name }}
+        value: ${{ jobs.build-and-push.outputs.version }}
     inputs:
       image-name:
         required: true
@@ -69,5 +69,5 @@ jobs:
       - name: Set output image name
         id: output        
         run: |          
-          image_name="harbor.mongodb.dk/ginkartoteket/${{ inputs.image-name }}:${{ inputs.buildid }}"
-          echo "image-name=${image_name}" >> $GITHUB_OUTPUT
+          image_name="${{ inputs.buildid }}"
+          echo "version=${image_name}" >> $GITHUB_OUTPUT
