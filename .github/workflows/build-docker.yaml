@@ -42,9 +42,7 @@ jobs:
           registry: harbor.mongodb.dk
           username: ${{ secrets.HARBOR_USERNAME }}
           password: ${{ secrets.HARBOR_PASSWORD }}
-      - name: Create new image name
-        run: |
-          echo
+      
       - name: Extract metadata for Docker
         id: meta
         uses: docker/metadata-action@v5
@@ -70,5 +68,6 @@ jobs:
     
       - name: Set output image name
         id: output        
-        run: |
-          echo "image-name=${{ steps.meta.outputs.tags }}" >> $GITHUB_OUTPUT
+        run: |          
+          image_name="harbor.mongodb.dk/ginkartoteket/${{ inputs.image-name }}:${{ inputs.buildid }}"
+          echo "image-name=${image_name}" >> $GITHUB_OUTPUT
