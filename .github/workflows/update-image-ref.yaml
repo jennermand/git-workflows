@@ -30,7 +30,7 @@ jobs:
  
     - name: UpdateRefFile 
       run: | 
-        echo "${{ inputs.container }}"> ./picluster/apps/${{ inputs.project }}/${{ inputs.image-name-file }}.imageref.txt 
+        yq -i '.angular-app.image.repository = "ginkartoteket/ginkartoteket" | .angular-app.image.tag = "latest"' ./picluster/apps/${{ inputs.project }}/values.yaml 
          
     - name: Push to Repo 
       run: | 
