@@ -69,7 +69,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            PROJECT=${{ inputs.project }}
+            PROJECT=${{ inputs.image-name }}
     
       - name: Set output image name
         id: output        
