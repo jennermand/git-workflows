@@ -14,7 +14,7 @@ on:
       section:
         required: false
         type: string
-        default: ${{ inputs.project }}
+        default: ""
           
 jobs: 
   reusable_workflow_job: 
