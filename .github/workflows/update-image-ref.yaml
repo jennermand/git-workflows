@@ -38,6 +38,7 @@ jobs:
     - name: UpdateRefFile 
       run: | 
         container="harbor.mongodb.dk/${{ inputs.project }}/${{ inputs.container }}"
+        subsection="${{ inputs.sub- != '' && '.'inputs.section || '' }}" 
         section="${{ inputs.section != '' && inputs.section || inputs.container }}" 
         yq -i ".${section}.image.repository = \"${container}\" | .${section}.image.tag = \"${{ inputs.version }}\"" ./picluster/apps/${{ inputs.project }}/values.yaml 
          
