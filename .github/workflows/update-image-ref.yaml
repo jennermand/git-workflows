@@ -15,6 +15,10 @@ on:
         required: false
         type: string
         default: ""
+      sub-section:
+        required: false
+        type: string
+        default: ""
           
 jobs: 
   reusable_workflow_job: 
