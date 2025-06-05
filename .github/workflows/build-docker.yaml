@@ -21,6 +21,16 @@ on:
       project:
         required: true
         type: string
+      context-path:
+        required: false
+        type: string
+        default: .
+        description: Folder to use as Docker build context (e.g. ./subfolder-a)
+      dockerfile-path:
+        required: false
+        type: string
+        default: ./Dockerfile
+        description: Path to Dockerfile (e.g. ./subfolder-a/Dockerfile)
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -58,10 +68,23 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           
           
+      # - name: Build and push Docker image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     platforms: linux/amd64,linux/arm64
+      #     push: ${{ github.event_name != 'pull_request' }}
+      #     tags: harbor.mongodb.dk/${{ inputs.project }}/${{ inputs.image-name }}:${{ inputs.buildid }}
+      #     labels: ${{ steps.meta.outputs.labels }}
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
+      #     build-args: |
+      #       PROJECT=${{ inputs.image-name }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ${{ inputs.context-path }}
+          file: ${{ inputs.dockerfile-path }}
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: harbor.mongodb.dk/${{ inputs.project }}/${{ inputs.image-name }}:${{ inputs.buildid }}
@@ -70,7 +93,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             PROJECT=${{ inputs.image-name }}
-    
+            
       - name: Set output image name
         id: output        
         run: |          
