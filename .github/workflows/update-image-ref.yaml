@@ -41,7 +41,7 @@ jobs:
       run: | 
         container="harbor.mongodb.dk/${{ inputs.project }}/${{ inputs.container }}"
         subsection="${{ inputs.sub-section != '' && '.' }}${{ inputs.sub-section }}"
-        section="${{ inputs.section:-${{ inputs.container }}}}" 
+        section="${inputs.section:-${inputs.container}}"
         yq -i ".${section}${subsection}.image.repository = \"${container}\" | .${section}${subsection}.image.tag = \"${{ inputs.version }}\"" ./picluster/apps/${{ inputs.project }}/values.yaml 
          
     - name: Push to Repo 
