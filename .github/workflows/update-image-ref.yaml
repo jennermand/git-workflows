@@ -35,20 +35,13 @@ jobs:
       run: | 
         git clone https://${{ secrets.TOKEN }}@github.com/jennermand/picluster.git
         
-    - name: Set section variable
-      run: |
-        if [[ -n "${{ inputs.section }}" ]]; then
-          section="${{ inputs.section }}"
-        else
-          section="${{ inputs.container }}"
-        fi
-        echo "section=$section" >> $GITHUB_ENV
+
         
     - name: UpdateRefFile 
       run: | 
         container="harbor.mongodb.dk/${{ inputs.project }}/${{ inputs.container }}"
         subsection="${{ inputs.sub-section != '' && '.' }}${{ inputs.sub-section }}"
-        section="${{ inputs.section:-${{ inputs.container }}}" 
+        section="${{ inputs.section:-${{ inputs.container }}}}" 
         yq -i ".${section}${subsection}.image.repository = \"${container}\" | .${section}${subsection}.image.tag = \"${{ inputs.version }}\"" ./picluster/apps/${{ inputs.project }}/values.yaml 
          
     - name: Push to Repo 
