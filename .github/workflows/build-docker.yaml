@@ -35,6 +35,7 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     container:
+      image: ubuntu:22.04
       options: --memory=4g
     outputs: 
       version:  ${{ steps.output.outputs.version }}
@@ -101,4 +102,5 @@ jobs:
         run: |          
           image_name="${{ inputs.buildid }}"
           echo "version=${image_name}" >> $GITHUB_OUTPUT
+
 
