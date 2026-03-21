@@ -31,6 +31,9 @@ on:
         type: string
         default: ./Dockerfile
         description: Path to Dockerfile (e.g. ./subfolder-a/Dockerfile)
+      RUNDSTYKKE_TOKEN:        # <-- add this
+        required: false
+        type: string
       build-args:
         required: false
         type: string
@@ -104,7 +107,7 @@ jobs:
           build-args: |
             PROJECT=${{ inputs.image-name }}
             ${{ inputs.build-args }}
-            
+            RUNDSTYKKE_TOKEN=${{ secrets.RUNDSTYKKE_TOKEN }}
       - name: Set output image name
         id: output        
         run: |          
