@@ -31,6 +31,15 @@ on:
         type: string
         default: ./Dockerfile
         description: Path to Dockerfile (e.g. ./subfolder-a/Dockerfile)
+      build-args:
+        required: false
+        type: string
+        default: ""
+        description: |
+          Newline-separated Docker build args in KEY=VALUE format.
+          Example:
+            FOO=bar
+            VERSION=1.2.3
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -94,6 +103,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             PROJECT=${{ inputs.image-name }}
+            ${{ inputs.build-args }}
             
       - name: Set output image name
         id: output        
