@@ -81,72 +81,43 @@ jobs:
             type=semver,pattern=${{ inputs.buildid }}
           labels: ${{ steps.meta.outputs.labels }}
           
-          
       # - name: Build and push Docker image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     platforms: linux/amd64,linux/arm64
-      #     push: ${{ github.event_name != 'pull_request' }}
-      #     tags: harbor.mongodb.dk/${{ inputs.project }}/${{ inputs.image-name }}:${{ inputs.buildid }}
-      #     labels: ${{ steps.meta.outputs.labels }}
-      #     cache-from: type=gha
-      #     cache-to: type=gha,mode=max
-      #     build-args: |
-      #       PROJECT=${{ inputs.image-name }}
-      # - name: Build and push Docker image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: ${{ inputs.context-path }}
-      #     file: ${{ inputs.dockerfile-path }}
-      #     platforms: linux/amd64,linux/arm64
-      #     push: ${{ github.event_name != 'pull_request' }}
-      #     tags: harbor.mongodb.dk/${{ inputs.project }}/${{ inputs.image-name }}:${{ inputs.buildid }}
-      #     labels: ${{ steps.meta.outputs.labels }}
-      #     cache-from: type=gha
-      #     cache-to: type=gha,mode=max
-      #     build-args: |
-      #       PROJECT=${{ inputs.image-name }}
-      #       ${{ inputs.build-args }}
-      #       RUNDSTYKKE_TOKEN=${{ secrets.RUNDSTYKKE_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        id: build_push
-        continue-on-error: true
-        with:
-          context: ${{ inputs.context-path }}
-          file: ${{ inputs.dockerfile-path }}
-          platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name != 'pull_request' }}
-          provenance: false
-          sbom: false
-          tags: harbor.mongodb.dk/${{ inputs.project }}/${{ inputs.image-name }}:${{ inputs.buildid }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            PROJECT=${{ inputs.image-name }}
-            ${{ inputs.build-args }}
-            RUNDSTYKKE_TOKEN=${{ secrets.RUNDSTYKKE_TOKEN }}
-
-      # - name: Retry build and push image
-      #   if: github.event_name != 'pull_request' && steps.build_push.outcome == 'failure'
       #   uses: docker/build-push-action@v6
+      #   id: build_push
+      #   continue-on-error: true
       #   with:
       #     context: ${{ inputs.context-path }}
       #     file: ${{ inputs.dockerfile-path }}
       #     platforms: linux/amd64,linux/arm64
-      #     push: true
-      #     no-cache: true
+      #     push: ${{ github.event_name != 'pull_request' }}
       #     provenance: false
       #     sbom: false
       #     tags: harbor.mongodb.dk/${{ inputs.project }}/${{ inputs.image-name }}:${{ inputs.buildid }}
       #     labels: ${{ steps.meta.outputs.labels }}
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
       #     build-args: |
       #       PROJECT=${{ inputs.image-name }}
       #       ${{ inputs.build-args }}
       #       RUNDSTYKKE_TOKEN=${{ secrets.RUNDSTYKKE_TOKEN }}
+
+      - name: Retry build and push image
+        if: github.event_name != 'pull_request' && steps.build_push.outcome == 'failure'
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ inputs.context-path }}
+          file: ${{ inputs.dockerfile-path }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          no-cache: true
+          provenance: false
+          sbom: false
+          tags: harbor.mongodb.dk/${{ inputs.project }}/${{ inputs.image-name }}:${{ inputs.buildid }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            PROJECT=${{ inputs.image-name }}
+            ${{ inputs.build-args }}
+            RUNDSTYKKE_TOKEN=${{ secrets.RUNDSTYKKE_TOKEN }}
 
 
       - name: Set output image name
