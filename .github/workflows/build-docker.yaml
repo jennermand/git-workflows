@@ -102,7 +102,7 @@ jobs:
       #       RUNDSTYKKE_TOKEN=${{ secrets.RUNDSTYKKE_TOKEN }}
 
       - name: Retry build and push image
-        if: github.event_name != 'pull_request' && steps.build_push.outcome == 'failure'
+        # if: github.event_name != 'pull_request' && steps.build_push.outcome == 'failure'
         uses: docker/build-push-action@v6
         with:
           context: ${{ inputs.context-path }}
