@@ -106,9 +106,9 @@ jobs:
           cache-from: type=gha 
           cache-to: type=gha,mode=max 
           build-args: | 
-            PROJECT=${{ inputs.image-name }} 
-            ${{ inputs.build-args }} 
+            PROJECT=${{ inputs.image-name }}             
             RUNDSTYKKE_TOKEN=${{ secrets.RUNDSTYKKE_TOKEN }} 
+            ${{ inputs.build-args != '' && inputs.build-args || '' }}
       - name: Set output image name 
         id: output         
         run: |           
