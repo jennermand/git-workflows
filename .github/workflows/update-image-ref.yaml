@@ -47,7 +47,7 @@ jobs:
         argo_project="${{ inputs.argo-project }}"
 
         if [ "$argo_project" != "apps" ]; then
-          argo_project="projects/$argo_project"
+          argo_project="projects/$argo_project/charts"
         fi
         section="${{ inputs.section != '' && inputs.section }}"
         if [ "${subsection}" = "false" ]; then
