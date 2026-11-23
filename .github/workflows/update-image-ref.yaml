@@ -19,6 +19,10 @@ on:
         required: false
         type: string
         default: ""
+      argo-project:
+       required: false
+       type: string
+       default: "apps"
           
 jobs: 
   reusable_workflow_job: 
@@ -33,19 +37,23 @@ jobs:
         
     - name: Clone Repository 
       run: | 
-        git clone https://${{ secrets.TOKEN }}@github.com/jennermand/picluster.git
-        
-
+        git clone https://${{ secrets.TOKEN }}@github.com/jennermand/picluster.git        
         
     - name: UpdateRefFile 
       run: | 
         container="harbor.mongodb.dk/${{ inputs.project }}/${{ inputs.container }}"
         subsection="${{ inputs.sub-section != '' && '.' }}${{ inputs.sub-section }}"
+        
+        argo_project="${{ inputs.argo-project }}"
+
+        if [ "$argo_project" != "apps" ]; then
+          argo_project="projects/$argo_project"
+        fi
         section="${{ inputs.section != '' && inputs.section }}"
         if [ "${subsection}" = "false" ]; then
           subsection=""
         fi
-        yq -i ".${section}${subsection}.image.repository = \"${container}\" | .${section}${subsection}.image.tag = \"${{ inputs.version }}\"" ./picluster/apps/${{ inputs.project }}/values.yaml 
+        yq -i ".${section}${subsection}.image.repository = \"${container}\" | .${section}${subsection}.image.tag = \"${{ inputs.version }}\"" ./picluster/${argo_project}/${{ inputs.project }}/values.yaml 
          
     - name: Push to Repo 
       run: | 
