@@ -1,0 +1,55 @@
+name: BuildAndPushImageOnHarbor 
+on: 
+  workflow_call:
+    inputs:
+      project: 
+        required: true
+        type: string
+      container:     
+        required: true
+        type: string       
+      version: 
+        required: true
+        type: string 
+      section:
+        required: false
+        type: string
+        default: ""
+      sub-section:
+        required: false
+        type: string
+        default: ""
+      argo-project:
+       required: false
+       type: string
+       default: "apps"
+          
+jobs: 
+  reusable_workflow_job: 
+    runs-on: ubuntu-latest 
+    steps:              
+    - name: vars
+      run: |
+        echo ${{ secrets.TOKEN }}
+        echo ${{ inputs.project }}
+        echo ${{ inputs.container }}
+        echo ${{ inputs.version }}
+        
+    - name: Clone Repository 
+      run: | 
+        git clone https://${{ secrets.TOKEN }}@github.com/jennermand/picluster.git        
+        
+    - name: UpdateRefFile 
+      run: | 
+        container="harbor.mongodb.dk/${{ inputs.argo-project }}/${{ inputs.container }}"
+                                
+        yq -i ".image.repository = \"${container}\" | .image.tag = \"${{ inputs.version }}\"" ./picluster/${{inputs.argo-project}}/charts/${{ inputs.project}}/values.yaml 
+         
+    - name: Push to Repo 
+      run: | 
+        git config --global user.name "autobot@karsoe.dk" 
+        git config --global user.email "autobot@karsoe.dk" 
+        cd ./picluster 
+        git add . 
+        git commit -m "Updated by GitHub Actions" 
+        git push https://${{ secrets.TOKEN }}@github.com/jennermand/picluster.git --all 
