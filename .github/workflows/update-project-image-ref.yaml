@@ -43,7 +43,7 @@ jobs:
       run: | 
         container="harbor.mongodb.dk/${{ inputs.argo-project }}/${{ inputs.container }}"
                                 
-        yq -i ".image.repository = \"${container}\" | .image.tag = \"${{ inputs.version }}\"" ./picluster/${{inputs.argo-project}}/charts/${{ inputs.project}}/values.yaml 
+        yq -i ".image.repository = \"${container}\" | .image.tag = \"${{ inputs.version }}\"" ./picluster/projects/${{inputs.argo-project}}/charts/${{ inputs.project}}/values.yaml 
          
     - name: Push to Repo 
       run: | 
